@@ -1,4 +1,4 @@
-## What is Generations 
+## What is the Generation
 In JVM, memory is managed in generations (memory pools holding objects of different ages). 
 Garbage collection occurs in each generation when the generation fills up.
 The vast majority of objects are allocated in a pool dedicated to young objects (the young generation), and most objects die there. 
@@ -25,7 +25,7 @@ One survivor space is empty at any time, and serves as the destination of any li
 the other survivor space is the destination during the next copying collection. 
 Objects are copied between survivor spaces in this way until they are old enough to be tenured (copied to the tenured generation).
 
-## Performance Considerations.
+## Performance Considerations
 This figure consists of a row of six rectangles. These rectangles are labeled as follows (from left to right):
 
 - Throughput is the percentage of total time not spent in garbage collection considered over long periods of time. 
@@ -59,6 +59,7 @@ After minor collections, the size includes some objects that are garbage (no lon
 These objects are either contained in the tenured generation or referenced from the tenured generation.
 
 The command line option `-XX:+PrintGCDetails` causes additional information about the collection to be printed.
+
 The command line option `-XX:+PrintGCTimeStamps` add a time stamp at the start of each collection. 
 This is useful to see how frequently garbage collections occur.
 
