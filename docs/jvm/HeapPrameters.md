@@ -17,10 +17,7 @@ at each collection within a specific range.
 This target range is set as a percentage by the parameters `-XX:MinHeapFreeRatio=<minimum>` and `-XX:MaxHeapFreeRatio=<maximum>`, 
 and the total size is bounded below by `-Xms<min>` and above by `-Xmx<max>`.
 
-
-
-
-
+Default parameter values for Heap size
 
 |Parameter|Default Value|
 |:----|:----|
