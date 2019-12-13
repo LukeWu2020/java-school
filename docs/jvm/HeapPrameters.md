@@ -26,7 +26,6 @@ Default parameter values for Heap size
 | -Xms | 6656K |
 | -Xmx | calculated |
 
-
 With these parameters, if the percent of free space in a generation falls below 40%, 
 then the generation will be expanded to maintain 40% free space, up to the maximum allowed size of the generation. 
 Similarly, if the free space exceeds 70%, then the generation will be contracted so that only 70% of the space is free, 
@@ -63,3 +62,34 @@ the virtual machine chooses a threshold number, which is the number times an obj
 This threshold is chosen to keep the survivors half full. 
 The command line option `-XX:+PrintTenuringDistribution` (not available on all garbage collectors) can be used to show this threshold 
 and the ages of objects in the new generation. It is also useful for observing the lifetime distribution of an application.
+
+**Default Paramter Values for Survior Space Sizing**
+
+|Paramter|Server JVM Default Value|
+|:----|:-----|
+|NewRatio|2|
+|NewSize|1310M|
+|MaxNewSize|not limited|
+|SurvivorRatio|8|
+
+The maximum size of the young generation will be calculated from the maximum size of the total heap and the value of the `NewRatio` parameter. 
+The "not limited" default value for the `MaxNewSize` parameter means that the calculated value is not limited by `MaxNewSize` 
+unless a value for MaxNewSize is specified on the command line.
+
+The following are general guidelines for server applications:
+
+- First decide the maximum heap size you can afford to give the virtual machine. Then plot your performance metric against young
+ generation sizes to find the best setting.
+
+    - Note that the maximum heap size should always be smaller than the amount of memory installed on the machine to avoid excessive
+ page faults and thrashing.
+
+- If the total heap size is fixed, then increasing the young generation size requires reducing the tenured generation size. Keep
+ the tenured generation large enough to hold all the live data used by the application at any given time, 
+ plus some amount of slack space (10 to 20% or more).
+
+- Subject to the previously stated constraint on the tenured generation:
+
+    - Grant plenty of memory to the young generation.
+
+    - Increase the young generation size as you increase the number of processors, because allocation can be parallelized.
