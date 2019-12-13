@@ -28,6 +28,8 @@ and the total size is bounded below by `-Xms<min>` and above by `-Xmx<max>`.
 | MaxHeapFreeRatio | 70 |
 | -Xms | 6656K |
 | -Xmx | calculated |
+
+
 With these parameters, if the percent of free space in a generation falls below 40%, 
 then the generation will be expanded to maintain 40% free space, up to the maximum allowed size of the generation. 
 Similarly, if the free space exceeds 70%, then the generation will be contracted so that only 70% of the space is free, 
