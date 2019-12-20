@@ -45,7 +45,7 @@ As mentioned earlier, the arrangement of the generations is different in
 the parallel collector. ***There is only one survivor area in young
 generation, while the another one is instead of a spaces area***.
 
-![aa](./arrangement_of_generation_for_parallel_collector.png)
+![Parallel Generation](./arrangement_of_generation_for_parallel_collector.png)
 
 ## Parallel Collector Ergonomics
 **The parallel collector is selected by default on server-class
