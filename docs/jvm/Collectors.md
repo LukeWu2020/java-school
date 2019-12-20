@@ -14,8 +14,7 @@ system configurations, or can be explicitly enabled with the option `-XX:+UsePar
     major collections are performed using a single thread, which can significantly limit scalability. Parallel compaction is enabled by 
     default if the option -XX:+UseParallelGC has been specified. The option to turn it off is -XX:-UseParallelOldGC.
     
-- The mostly concurrent collector performs most of its work concurrently (for example, while the application is still running
+- The mostly **concurrent collector** performs most of its work concurrently (for example, while the application is still running
 ) to keep garbage collection pauses short. It is designed for applications with medium-sized to large-sized data sets in which response time 
-is more important than overall throughput because the techniques used to minimize pauses can reduce application performance. 
-The Java HotSpot VM offers a choice between two mostly concurrent collectors;
+is more important than overall throughput because the techniques used to minimize pauses can reduce application performance. The Java HotSpot VM offers a choice between two mostly concurrent collectors;
 Use the option `-XX:+UseConcMarkSweepGC` to enable the **CMS collector** or `-XX:+UseG1GC` to enable the **G1 collector**.
