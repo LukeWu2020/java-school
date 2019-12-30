@@ -6,9 +6,13 @@
 1. [Generations](./Generations.md)
 2. [Heap Sizing](./HeapParameters.md)
 3. [Collectors](./Collectors.md)
-   -  [Parallel Collector](./ParallelCollector.md)
+   - [Serial Collector(TODO)]
+   - [Parallel Collector](./ParallelCollector.md)
+   - [CMS Collector](./CMSCollector.md)
+   - [G1 Collector](./GarbageFirstCollector.md)
   
 
 ## References
 [Concurrent Mark Sweep Collector](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/cms.html)
+
 [Garbage-First Garbage Collector](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc.html#garbage_first_garbage_collection)

@@ -19,5 +19,6 @@ public class EchoGame {
     }
 
     System.out.println("Game Over！");
+    long a = 3L;
   }
 }

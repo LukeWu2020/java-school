@@ -78,7 +78,7 @@ threads and the garbage collector thread run concurrently during a major
 collection, objects that are traced by the garbage collector thread may
 subsequently become unreachable by the time collection process ends.
 Such unreachable objects that have not yet been reclaimed are referred
-to as floating garbage. The amount of floating garbage depends on the
+to as *floating garbage*. The amount of floating garbage depends on the
 duration of the concurrent collection cycle and on the frequency of
 reference updates, also known as mutations, by the application.
 Furthermore, because the young generation and the tenured generation are
@@ -87,3 +87,97 @@ rough guideline, try increasing the size of the tenured generation by
 20% to account for the floating garbage. Floating garbage in the heap at
 the end of one concurrent collection cycle is collected during the next
 collection cycle.
+
+## Pauses
+The CMS collector pauses an application twice during a concurrent
+collection cycle. The first pause is to mark as live the objects
+directly reachable from the roots (for example, object references from
+application thread stacks and registers, static objects and so on) and
+from elsewhere in the heap (for example, the young generation). This
+first pause is referred to as the *initial mark pause*. The second pause
+comes at the end of the concurrent tracing phase and finds objects that
+were missed by the concurrent tracing due to updates by the application
+threads of references in an object after the CMS collector had finished
+tracing that object. This second pause is referred to as the *remark
+pause*.
+
+## Concurrent Phases
+The concurrent tracing of the reachable object graph occurs between the
+initial mark pause and the remark pause. During this concurrent tracing
+phase one or more concurrent garbage collector threads may be using
+processor resources that would otherwise have been available to the
+application. As a result, compute-bound applications may see a
+commensurate fall in application throughput during this and other
+concurrent phases even though the application threads are not paused.
+After the remark pause, a concurrent sweeping phase collects the objects
+identified as unreachable. Once a collection cycle completes, the CMS
+collector waits, consuming almost no computational resources, until the
+start of the next major collection cycle.
+
+## Starting a Concurrent Collection Cycle
+***With the serial collector a major collection occurs whenever the
+tenured generation becomes full and all application threads are stopped
+while the collection is done.*** In contrast, the start of a concurrent
+collection must be timed such that the collection can finish before the
+tenured generation becomes full; otherwise, the application would
+observe longer pauses due to concurrent mode failure. There are several
+ways to start a concurrent collection.
+
+- Based on recent history, the CMS collector maintains estimates of the
+time remaining before the tenured generation will be exhausted and of
+the time needed for a concurrent collection cycle. Using these dynamic
+estimates, a concurrent collection cycle is started with the aim of
+completing the collection cycle before the tenured generation is
+exhausted. These estimates are padded for safety, because concurrent
+mode failure can be very costly.
+
+- A concurrent collection also starts if the occupancy of the tenured
+  generation exceeds an initiating occupancy (a percentage of the
+  tenured generation). The default value for this initiating occupancy
+  threshold is approximately 92%, but the value is subject to change
+  from release to release. This value can be manually adjusted using the
+  command-line option `-XX:CMSInitiatingOccupancyFraction=<N>`, where
+  `<N>` is an integral percentage (0 to 100) of the tenured generation
+  size.
+
+## Scheduling Pauses
+The pauses for the young generation collection and the tenured
+generation collection occur independently. They do not overlap, but may
+occur in quick succession such that the pause from one collection,
+immediately followed by one from the other collection, can appear to be
+a single, longer pause. To avoid this, the CMS collector attempts to
+schedule the remark pause roughly midway between the previous and next
+young generation pauses. This scheduling is currently not done for the
+initial mark pause, which is usually much shorter than the remark pause.
+
+## Measurements
+Note that the output for the CMS collector is interspersed with the
+output from the minor collections; typically many minor collections
+occur during a concurrent collection cycle. `CMS-initial-mark` indicates
+the start of the concurrent collection cycle, `CMS-concurrent-mark`
+indicates the end of the concurrent marking phase, and
+`CMS-concurrent-sweep` marks the end of the concurrent sweeping phase.
+Not discussed previously is the precleaning phase indicated by
+`CMS-concurrent-preclean`. Precleaning represents work that can be done
+concurrently in preparation for the remark phase CMS-remark. The final
+phase is indicated by `CMS-concurrent-reset` and is in preparation for
+the next concurrent collection.
+
+```
+[GC [1 CMS-initial-mark: 13991K(20288K)] 14103K(22400K), 0.0023781 secs]
+[GC [DefNew: 2112K->64K(2112K), 0.0837052 secs] 16103K->15476K(22400K), 0.0838519 secs]
+...
+[GC [DefNew: 2077K->63K(2112K), 0.0126205 secs] 17552K->15855K(22400K), 0.0127482 secs]
+[CMS-concurrent-mark: 0.267/0.374 secs]
+[GC [DefNew: 2111K->64K(2112K), 0.0190851 secs] 17903K->16154K(22400K), 0.0191903 secs]
+[CMS-concurrent-preclean: 0.044/0.064 secs]
+[GC [1 CMS-remark: 16090K(20288K)] 17242K(22400K), 0.0210460 secs]
+[GC [DefNew: 2112K->63K(2112K), 0.0716116 secs] 18177K->17382K(22400K), 0.0718204 secs]
+[GC [DefNew: 2111K->63K(2112K), 0.0830392 secs] 19363K->18757K(22400K), 0.0832943 secs]
+...
+[GC [DefNew: 2111K->0K(2112K), 0.0035190 secs] 17527K->15479K(22400K), 0.0036052 secs]
+[CMS-concurrent-sweep: 0.291/0.662 secs]
+[GC [DefNew: 2048K->0K(2112K), 0.0013347 secs] 17527K->15479K(27912K), 0.0014231 secs]
+[CMS-concurrent-reset: 0.016/0.016 secs]
+[GC [DefNew: 2048K->1K(2112K), 0.0013936 secs] 17527K->15479K(27912K), 0.0014814 secs
+```

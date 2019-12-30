@@ -3,8 +3,8 @@ In JVM, memory is managed in generations (memory pools holding objects
 of different ages). Garbage collection occurs in each generation when
 the generation fills up. The vast majority of objects are allocated in a
 pool dedicated to young objects (the young generation), and most objects
-die there. When the young generation fills up, it causes a minor
-collection in which only the young generation is collected; garbage in
+die there. When the young generation fills up, it causes a `minor
+collection` in which only the young generation is collected; garbage in
 other generations is not reclaimed. Minor collections can be optimized,
 assuming that the weak generational hypothesis holds and most objects in
 the young generation are garbage and can be reclaimed. The costs of such
@@ -15,15 +15,15 @@ collected very quickly.
 Typically, some fraction of the surviving objects from the young
 generation are moved to the tenured generation during each minor
 collection. Eventually, the tenured generation will fill up and must be
-collected, resulting in a major collection, in which the entire heap is
-collected. Major collections usually last much longer than minor
+collected, resulting in a `major collection`, in which the entire heap
+is collected. Major collections usually last much longer than minor
 collections because a significantly larger number of objects are
 involved.
 
 ## Default Arrangement of Generations
-`Please note that it shows the default arrangement of generations for
-all collectors with the exception of the Parallel Collector and G1
-Collector`
+> Please note that it shows the default arrangement of generations for
+> all collectors with the exception of the Parallel Collector and G1
+> Collector.
 
 ![Default arrangement of generations](./arrangement_of_generations.png)
 
