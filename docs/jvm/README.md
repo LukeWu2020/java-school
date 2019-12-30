@@ -1,6 +1,6 @@
 ## Index
 > Please note that all docs are based on JDK 8. To find all values of
-> command-line options, you should start an application whit
+> command-line options, you should start an application with
 > command-line option `-XX:+PrintFlagsFinal`.
 
 1. [Generations](./Generations.md)
