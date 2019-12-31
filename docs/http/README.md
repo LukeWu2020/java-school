@@ -8,7 +8,7 @@
   -   [Overview](./http_message_overview.md)
   -   [Request Message](./http_request_message.md)
   -   [Response Message](./http_response_message.md)
-  -   [Headers]()
+  -   [Headers](./http_headers.md)
   -   [Methods]()
 
 
@@ -16,3 +16,5 @@
 [Hypertext Transfer Protocol](https://developer.mozilla.org/en-US/docs/Web/HTTP)
 
 [Http Message](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages)
+
+[HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
