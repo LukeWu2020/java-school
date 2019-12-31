@@ -23,3 +23,4 @@ form results. HTTP can also be used to fetch parts of documents to
 update Web pages on demand.
 
 ![Http & Layers](./HTTP_layers.png)
+
