@@ -9,7 +9,7 @@
   -   [Request Message](./http_request_message.md)
   -   [Response Message](./http_response_message.md)
   -   [Headers](./http_headers.md)
-  -   [Methods]()
+  -   [Methods](./http_methods.md)
 
 
 ## References
@@ -18,3 +18,5 @@
 [Http Message](https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages)
 
 [HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+
+[HTTP Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
